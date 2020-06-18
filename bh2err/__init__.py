@@ -1,1 +1,1 @@
-from bh2err.convert import print_stuff
+from bh2err.convert import convert_to_dicts
