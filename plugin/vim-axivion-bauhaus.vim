@@ -28,20 +28,24 @@ endif
 
 function! ConvertBauhaus(path)
 
+  if filereadable(a:path)
 python3 << EOF
 path = vim.eval('a:path')
 bh_version = vim.eval('g:bauhaus_version')
-dicts = bh2err.convert_to_dicts(path, bh_version)
+dicts = bh2err.convert_file(path, bh_version)
 EOF
 
-  let l:items = py3eval('dicts')
-  call setqflist(l:items, 'r')
-  "let w:quickfix_title = 'Bauhaus Issues'
-  ":cw
-  :cc
+    let l:items = py3eval('dicts')
+    call setqflist(l:items, 'r')
+    "let w:quickfix_title = 'Bauhaus Issues'
+    ":cw
+    :cc
+  else
+    echo 'No such file.'
+  endif
 
 endfunction
 
-command! -nargs=1 ConvBh call ConvertBauhaus(<args>)
+command! -nargs=1 -complete=file ConvBh call ConvertBauhaus(<f-args>)
 
 let g:vim_axivion_bauhaus_loaded = 1
