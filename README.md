@@ -5,6 +5,10 @@ Found issues can be managed inside Axivion's dashboard and also exported to CSV 
 This plugin aims to provide functionality to read in these CSV files into VIM to more easily jump to the problematic locations inside your code.
 
 To achieve this, the CVS content is parsed and afterwards written into VIM's quickfix list (see `:help quickfix`).
+
+**This plugin is in early stages of development and therefore bugs are expected.**
+(Feel free to report issues.)
+
 I'm in no way affiliated with Axivion.
 
 ## Requirements
