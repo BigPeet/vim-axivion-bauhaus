@@ -1,0 +1,6 @@
+"Id";"State";"Suppressed";"Error Number";"Message";"Entity";"Path";"Line";"Provider";"Severity";"Justification";"Tags"
+"test-component:SV01";"added";"false";"Error 42";"You didn't say the magic word.";"";"test/file.c";"37";"";"high";"";""
+"test-component:SV02";"added";"false";"Error 12312";"Test";"";"test/file.c";"120";"";"warning";"";""
+"abcd-component:SV03";"added";"false";"ABC: asdf";"";"";"test/file.h";"42";"";"high";"";""
+"efgh-component:SV04";"added";"false";"";"You didn't say the magic word.";"";"real/file.c";"49";"";"advisory";"";""
+"äöüß-component:SV05";"added";"false";"Error 42";"You didn't say the magic word.";"";"test/config.c";"0";"";"required";"";""
