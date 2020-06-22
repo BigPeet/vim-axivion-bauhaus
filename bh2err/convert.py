@@ -72,20 +72,32 @@ def __tokenize_entry(entry):
     return []
 
 
+def __get_token(tokens, index):
+    if index < 0 or index >= len(tokens):
+        return ""
+    return tokens[index].strip()[1:-1]
+
+
 def __convert_style_violations(entries):
     violations = []
     for entry in entries:
-        tokens = tokenize_entry(entry)
-        # tokens = entry.split(CSV_SEPARATOR)
+        tokens = __tokenize_entry(entry)
+
+        filename = __get_token(tokens, STYLE_VIOLATION_HEADERS.index("Path"))
+        line_num = int(__get_token(tokens, STYLE_VIOLATION_HEADERS.index("Line")))
+        message = __get_token(tokens, STYLE_VIOLATION_HEADERS.index("Message"))
+        severity = __get_token(tokens, STYLE_VIOLATION_HEADERS.index("Severity"))
+        error_num = __get_token(tokens, STYLE_VIOLATION_HEADERS.index("Error Number"))
+
         violation = dict()
-        violation["filename"] = tokens[STYLE_VIOLATION_HEADERS.index("Path")].strip()[1:-1]
-        violation["lnum"] = int(tokens[STYLE_VIOLATION_HEADERS.index("Line")].strip()[1:-1])
-        violation["text"] = tokens[STYLE_VIOLATION_HEADERS.index("Message")].strip()[1:-1]
-        severity = tokens[STYLE_VIOLATION_HEADERS.index("Severity")].strip()[1:-1]
+        violation["filename"] = filename
+        violation["lnum"] = line_num
+        violation["text"] = error_num + ": " + message
         if severity == "warning" or severity == "advisory":
             violation["type"] = "W"
         else:
             violation["type"] = "E"
-        violation["nr"] = tokens[STYLE_VIOLATION_HEADERS.index("Error Number")].strip()[1:-1]
+        violation["nr"] = error_num
+
         violations.append(violation)
     return violations
