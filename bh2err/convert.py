@@ -1,6 +1,6 @@
 STYLE_VIOLATION_HEADERS = ["Id", "State", "Suppressed", "Error Number",
-        "Message", "Entity", "Path", "Line", "Provider", "Severity",
-        "Justification", "Tags"]
+                           "Message", "Entity", "Path", "Line", "Provider", "Severity",
+                           "Justification", "Tags"]
 CSV_SEPARATOR = ";"
 
 
@@ -13,17 +13,19 @@ def convert_file(path, version):
         return convert_text(content, version)
     return []
 
+
 def convert_text(content, version):
     output = []
     content = content.strip()
     headers = content[:content.index("\n")].replace("\"", "").split(CSV_SEPARATOR)
-    entries = split_into_entries(content[content.index("\n") + 1:], len(headers))
+    entries = __split_into_entries(content[content.index("\n") + 1:], len(headers))
     if headers == STYLE_VIOLATION_HEADERS:
-        output = convert_style_violations(entries)
+        output = __convert_style_violations(entries)
 
     return output
 
-def split_into_entries(content, length):
+
+def __split_into_entries(content, length):
     entries = []
     entry_start = 0
     while entry_start < len(content):
@@ -31,7 +33,7 @@ def split_into_entries(content, length):
         for _ in range(length - 1):
             start = content.find(CSV_SEPARATOR, start)
             if start == -1:
-                return [] # not well-formed CSV
+                return []  # not well-formed CSV
             else:
                 start += 1
         if start != -1:
@@ -41,14 +43,15 @@ def split_into_entries(content, length):
             else:
                 entries.append(content[entry_start:])
         else:
-            return [] # not well-formed CSV
+            return []  # not well-formed CSV
         if start != -1:
             entry_start = start + 1
         else:
             entry_start = len(content)
     return entries
 
-def tokenize_entry(entry):
+
+def __tokenize_entry(entry):
     tokens = []
     it = 0
     entry_start = 0
@@ -69,7 +72,7 @@ def tokenize_entry(entry):
     return []
 
 
-def convert_style_violations(entries):
+def __convert_style_violations(entries):
     violations = []
     for entry in entries:
         tokens = tokenize_entry(entry)
