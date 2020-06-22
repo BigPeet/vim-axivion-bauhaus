@@ -1,3 +1,5 @@
+import os.path
+
 STYLE_VIOLATION_HEADERS = ["Id", "State", "Suppressed", "Error Number",
                            "Message", "Entity", "Path", "Line", "Provider", "Severity",
                            "Justification", "Tags"]
@@ -5,7 +7,12 @@ CSV_SEPARATOR = ";"
 
 
 def convert_file(path, version):
+
+    if not os.path.isfile(path):
+        return []
+
     content = ""
+
     with open(path, "r") as f:
         content = f.read()
 
@@ -15,12 +22,18 @@ def convert_file(path, version):
 
 
 def convert_text(content, version):
-    output = []
     content = content.strip()
-    headers = content[:content.index("\n")].replace("\"", "").split(CSV_SEPARATOR)
-    entries = __split_into_entries(content[content.index("\n") + 1:], len(headers))
-    if headers == STYLE_VIOLATION_HEADERS:
-        output = __convert_style_violations(entries)
+    new_line_idx = content.find("\n")
+
+    if new_line_idx == -1:
+        return []
+
+    output = []
+    headers = content[:new_line_idx].replace("\"", "").split(CSV_SEPARATOR)
+    if (new_line_idx + 1) < len(content):
+        entries = __split_into_entries(content[new_line_idx + 1:], len(headers))
+        if headers == STYLE_VIOLATION_HEADERS:
+            output = __convert_style_violations(entries)
 
     return output
 
@@ -84,19 +97,34 @@ def __convert_style_violations(entries):
         tokens = __tokenize_entry(entry)
 
         filename = __get_token(tokens, STYLE_VIOLATION_HEADERS.index("Path"))
-        line_num = int(__get_token(tokens, STYLE_VIOLATION_HEADERS.index("Line")))
+        line_num = __get_token(tokens, STYLE_VIOLATION_HEADERS.index("Line"))
         message = __get_token(tokens, STYLE_VIOLATION_HEADERS.index("Message"))
         severity = __get_token(tokens, STYLE_VIOLATION_HEADERS.index("Severity"))
         error_num = __get_token(tokens, STYLE_VIOLATION_HEADERS.index("Error Number"))
 
+        if line_num.isdigit():
+            line_num = max(0, int(line_num))
+        else:
+            line_num = 0
+
+        text = ""
+        if error_num and message:
+            text = error_num + ": " + message
+        elif error_num:
+            text = error_num
+        elif message:
+            text = message
+
         violation = dict()
         violation["filename"] = filename
         violation["lnum"] = line_num
-        violation["text"] = error_num + ": " + message
+        violation["text"] = text
         if severity == "warning" or severity == "advisory":
             violation["type"] = "W"
-        else:
+        elif severity:
             violation["type"] = "E"
+        else:
+            violation["type"] = ""
         violation["nr"] = error_num
 
         violations.append(violation)
