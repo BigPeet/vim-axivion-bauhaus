@@ -81,7 +81,7 @@ def test_SV_invalid_line_num():
 
 
 def test_SV_semicolon_and_linebreak_in_text():
-    msg = 'Message ; \n interrupted; by ; and \n; '
+    msg = 'Message ; \\n interrupted; by ; and \\n; '
     content = 4 * '"";' + '"' + msg + '";' + 6 * '"";' + '""'
     dicts = bh2err.convert_text(SV_HEADER_STR + "\n" + content, "")
     assert len(dicts) == 1
