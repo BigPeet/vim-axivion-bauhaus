@@ -4,7 +4,14 @@ import csv
 STYLE_VIOLATION_HEADERS = ["Id", "State", "Suppressed", "Error Number",
                            "Message", "Entity", "Path", "Line", "Provider", "Severity",
                            "Justification", "Tags"]
+ARCHITECTURE_VIOLATION_HEADERS = ["Id", "State", "Suppressed", "Violation Type", "Architecture Source",
+                                  "Architecture Source Linkname", "Architecture Source Type", "Architecture Target",
+                                  "Architecture Target Linkname", "Architecture Target Type", "Source Entity",
+                                  "Source Linkname", "Source Entity Type", "Source Path", "Source Line",
+                                  "Dependency Type", "Target Entity", "Target Linkname", "Target Entity Type",
+                                  "Target Path", "Target Line", "Justification", "Tags"]
 CSV_SEPARATOR = ";"
+
 
 def convert_file(path, version):
     if not os.path.isfile(path):
@@ -17,6 +24,7 @@ def convert_file(path, version):
     if len(content) > 0:
         return convert_text(content, version)
     return []
+
 
 def convert_text(content, version):
     output = []
@@ -32,8 +40,11 @@ def convert_text(content, version):
 
         if headers == STYLE_VIOLATION_HEADERS:
             output = __convert_style_violations(entries)
+        if headers == ARCHITECTURE_VIOLATION_HEADERS:
+            output = __convert_architecture_violations(entries)
 
     return output
+
 
 def __convert_style_violations(entries):
     violations = []
@@ -68,6 +79,41 @@ def __convert_style_violations(entries):
         else:
             violation["type"] = ""
         violation["nr"] = error_num
+
+        violations.append(violation)
+    return violations
+
+
+def __convert_architecture_violations(entries):
+    violations = []
+    for token in entries:
+        filename = token[ARCHITECTURE_VIOLATION_HEADERS.index("Source Path")]
+        line_num = token[ARCHITECTURE_VIOLATION_HEADERS.index("Source Line")]
+        source_link = token[ARCHITECTURE_VIOLATION_HEADERS.index("Source Linkname")]
+        target_link = token[ARCHITECTURE_VIOLATION_HEADERS.index("Target Linkname")]
+        violation_type = token[ARCHITECTURE_VIOLATION_HEADERS.index("Violation Type")]
+
+        if line_num.isdigit():
+            line_num = max(0, int(line_num))
+        else:
+            line_num = 0
+
+        text = ""
+        if source_link and target_link:
+            text = source_link + " -> " + target_link
+        elif source_link:
+            text = source_link
+
+        violation = dict()
+        violation["filename"] = filename
+        violation["lnum"] = line_num
+        violation["text"] = text
+        if violation_type == "Divergence":
+            violation["type"] = "E"
+        elif violation_type:
+            violation["type"] = "W"
+        else:
+            violation["type"] = ""
 
         violations.append(violation)
     return violations

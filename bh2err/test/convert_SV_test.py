@@ -6,14 +6,6 @@ SV_HEADER_STR = '"Id";"State";"Suppressed";"Error Number";"Message";"Entity";'\
     '"Path";"Line";"Provider";"Severity";"Justification";"Tags"'
 
 
-def test_SV_only_header_file():
-    path = DIRECTORY + "/ONLY_HEADERS.csv"
-    assert bh2err.convert_file(path, "") == []
-    with open(path, "r") as f:
-        content = f.read()
-        assert bh2err.convert_text(content, "") == []
-
-
 def test_SV_sane_examples():
     path = DIRECTORY + "/SV_sane_examples.csv"
     file_dicts = bh2err.convert_file(path, "")
