@@ -2,7 +2,7 @@ import bh2err
 import os.path
 
 DIRECTORY = os.path.dirname(__file__)
-ARCHITECTURE_VIOLATION_HEADERS = '"Id";"State";"Suppressed";"Violation Type";"Architecture Source";'\
+AV_HEADER_STR = '"Id";"State";"Suppressed";"Violation Type";"Architecture Source";'\
                                   '"Architecture Source Linkname";"Architecture Source Type";"Architecture Target";'\
                                   '"Architecture Target Linkname";"Architecture Target Type";"Source Entity";'\
                                   '"Source Linkname";"Source Entity Type";"Source Path";"Source Line";'\
@@ -41,7 +41,7 @@ def test_AV_sane_examples():
 
 
 def test_AV_empty_entry():
-    content = ARCHITECTURE_VIOLATION_HEADERS + "\n" + 22 * '"";' + '""'
+    content = AV_HEADER_STR + "\n" + 22 * '"";' + '""'
     print(content)
     dicts = bh2err.convert_text(content, "")
     assert len(dicts) == 1
@@ -57,11 +57,39 @@ def test_AV_invalid_line_num():
     nonexistent_line_num = line_num_pattern.format("")
     nan_line_num = line_num_pattern.format("test")
 
-    dicts = bh2err.convert_text(ARCHITECTURE_VIOLATION_HEADERS + "\n" + negative_line_num, "")
+    dicts = bh2err.convert_text(AV_HEADER_STR + "\n" + negative_line_num, "")
     assert dicts[0]["lnum"] == 0
 
-    dicts = bh2err.convert_text(ARCHITECTURE_VIOLATION_HEADERS + "\n" + nonexistent_line_num, "")
+    dicts = bh2err.convert_text(AV_HEADER_STR + "\n" + nonexistent_line_num, "")
     assert dicts[0]["lnum"] == 0
 
-    dicts = bh2err.convert_text(ARCHITECTURE_VIOLATION_HEADERS + "\n" + nan_line_num, "")
+    dicts = bh2err.convert_text(AV_HEADER_STR + "\n" + nan_line_num, "")
     assert dicts[0]["lnum"] == 0
+
+
+def test_AV_suppressed_violations():
+    line_pattern = 2 * '"";' + '"{}";' + 19 * '"";' + '""'
+    suppressed_false = line_pattern.format("false")
+    suppressed_true = line_pattern.format("true")
+    suppressed_none = line_pattern.format("")
+
+    dicts = bh2err.convert_text(AV_HEADER_STR + "\n" + suppressed_false, "")
+    assert len(dicts) == 1
+    dicts = bh2err.convert_text(AV_HEADER_STR + "\n" + suppressed_none, "")
+    assert len(dicts) == 1
+    dicts = bh2err.convert_text(AV_HEADER_STR + "\n" + suppressed_true, "")
+    assert len(dicts) == 0
+
+    dicts = bh2err.convert_text(AV_HEADER_STR + "\n" + suppressed_false, "", filter_suppressed=True)
+    assert len(dicts) == 1
+    dicts = bh2err.convert_text(AV_HEADER_STR + "\n" + suppressed_none, "", filter_suppressed=True)
+    assert len(dicts) == 1
+    dicts = bh2err.convert_text(AV_HEADER_STR + "\n" + suppressed_true, "", filter_suppressed=True)
+    assert len(dicts) == 0
+
+    dicts = bh2err.convert_text(AV_HEADER_STR + "\n" + suppressed_false, "", filter_suppressed=False)
+    assert len(dicts) == 1
+    dicts = bh2err.convert_text(AV_HEADER_STR + "\n" + suppressed_none, "", filter_suppressed=False)
+    assert len(dicts) == 1
+    dicts = bh2err.convert_text(AV_HEADER_STR + "\n" + suppressed_true, "", filter_suppressed=False)
+    assert len(dicts) == 1

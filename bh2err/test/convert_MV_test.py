@@ -86,3 +86,31 @@ def test_MV_invalid_line_num():
 
     dicts = bh2err.convert_text(MV_HEADER_STR + "\n" + nan_line_num, "")
     assert dicts[0]["lnum"] == 0
+
+
+def test_MV_suppressed_violations():
+    line_pattern = 2 * '"";' + '"{}";' + 12 * '"";' + '""'
+    suppressed_false = line_pattern.format("false")
+    suppressed_true = line_pattern.format("true")
+    suppressed_none = line_pattern.format("")
+
+    dicts = bh2err.convert_text(MV_HEADER_STR + "\n" + suppressed_false, "")
+    assert len(dicts) == 1
+    dicts = bh2err.convert_text(MV_HEADER_STR + "\n" + suppressed_none, "")
+    assert len(dicts) == 1
+    dicts = bh2err.convert_text(MV_HEADER_STR + "\n" + suppressed_true, "")
+    assert len(dicts) == 0
+
+    dicts = bh2err.convert_text(MV_HEADER_STR + "\n" + suppressed_false, "", filter_suppressed=True)
+    assert len(dicts) == 1
+    dicts = bh2err.convert_text(MV_HEADER_STR + "\n" + suppressed_none, "", filter_suppressed=True)
+    assert len(dicts) == 1
+    dicts = bh2err.convert_text(MV_HEADER_STR + "\n" + suppressed_true, "", filter_suppressed=True)
+    assert len(dicts) == 0
+
+    dicts = bh2err.convert_text(MV_HEADER_STR + "\n" + suppressed_false, "", filter_suppressed=False)
+    assert len(dicts) == 1
+    dicts = bh2err.convert_text(MV_HEADER_STR + "\n" + suppressed_none, "", filter_suppressed=False)
+    assert len(dicts) == 1
+    dicts = bh2err.convert_text(MV_HEADER_STR + "\n" + suppressed_true, "", filter_suppressed=False)
+    assert len(dicts) == 1

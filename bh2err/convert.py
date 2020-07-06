@@ -29,17 +29,27 @@ def convert_file(path, version):
     return []
 
 
-def convert_text(content, version):
+def convert_text(content, version, filter_suppressed=True):
     output = []
     if content:
         reader = csv.reader(content.strip().split("\n"), delimiter=";", )
 
+        headers = []
         entries = []
+        filters = []
+        if filter_suppressed:
+            filters.append(lambda row, headers: row[headers.index("Suppressed")].lower() == "true")
+
         for line_num, row in enumerate(reader):
-            if line_num > 0:
-                entries.append(row)
-            else:
+            if line_num == 0:
                 headers = row
+            else:
+                # will evaluate all filters regardless of prior results
+                # this is fine for now, but maybe split this up into separate steps
+                # if slower filters are introduced
+                if any([f(row, headers) for f in filters]):
+                    break
+                entries.append(row)
 
         if headers == STYLE_VIOLATION_HEADERS:
             output = __convert_style_violations(entries)

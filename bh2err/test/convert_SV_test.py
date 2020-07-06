@@ -78,3 +78,31 @@ def test_SV_semicolon_and_linebreak_in_text():
     dicts = bh2err.convert_text(SV_HEADER_STR + "\n" + content, "")
     assert len(dicts) == 1
     assert dicts[0]["text"] == msg
+
+
+def test_SV_suppressed_violations():
+    line_pattern = 2 * '"";' + '"{}";' + 8 * '"";' + '""'
+    suppressed_false = line_pattern.format("false")
+    suppressed_true = line_pattern.format("true")
+    suppressed_none = line_pattern.format("")
+
+    dicts = bh2err.convert_text(SV_HEADER_STR + "\n" + suppressed_false, "")
+    assert len(dicts) == 1
+    dicts = bh2err.convert_text(SV_HEADER_STR + "\n" + suppressed_none, "")
+    assert len(dicts) == 1
+    dicts = bh2err.convert_text(SV_HEADER_STR + "\n" + suppressed_true, "")
+    assert len(dicts) == 0
+
+    dicts = bh2err.convert_text(SV_HEADER_STR + "\n" + suppressed_false, "", filter_suppressed=True)
+    assert len(dicts) == 1
+    dicts = bh2err.convert_text(SV_HEADER_STR + "\n" + suppressed_none, "", filter_suppressed=True)
+    assert len(dicts) == 1
+    dicts = bh2err.convert_text(SV_HEADER_STR + "\n" + suppressed_true, "", filter_suppressed=True)
+    assert len(dicts) == 0
+
+    dicts = bh2err.convert_text(SV_HEADER_STR + "\n" + suppressed_false, "", filter_suppressed=False)
+    assert len(dicts) == 1
+    dicts = bh2err.convert_text(SV_HEADER_STR + "\n" + suppressed_none, "", filter_suppressed=False)
+    assert len(dicts) == 1
+    dicts = bh2err.convert_text(SV_HEADER_STR + "\n" + suppressed_true, "", filter_suppressed=False)
+    assert len(dicts) == 1
