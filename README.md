@@ -9,7 +9,7 @@ To achieve this, the CVS content is parsed and afterwards written into VIM's qui
 **This plugin is in early stages of development and therefore bugs are expected.**
 (Feel free to report issues.)
 
-I'm in no way affiliated with Axivion.
+This plugin and I are not affiliated with Axivion.
 
 ## Requirements
 
