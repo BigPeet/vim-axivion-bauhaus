@@ -44,7 +44,7 @@ def test_MV_sane_examples():
     assert file_dicts[4]["lnum"] == 0
     assert file_dicts[4]["type"] == "E"
     assert file_dicts[4]["text"] == "Metric.OO.WMC.One (Weighted Methods per Class based on 1): "\
-                                    " 28.0. Allowed range: [0.0, 15.0]"
+                                    "28.0. Allowed range: [0.0, 15.0]"
 
     assert file_dicts[5]["filename"] == "test/file.c"
     assert file_dicts[5]["lnum"] == 33
