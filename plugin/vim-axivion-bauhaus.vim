@@ -22,15 +22,32 @@ sys.path.insert(0, python_root_dir)
 import bh2err
 EOF
 
+" Define Options and their defaults
 if !exists('g:bauhaus_version')
   let g:bauhaus_version = '6.9.15'
 endif
+
+if !exists('g:vim_axivion_bauhaus_open_error_list')
+  let g:vim_axivion_bauhaus_open_error_list = 0
+endif
+
+if !exists('g:vim_axivion_bauhaus_jump_to_error')
+  let g:vim_axivion_bauhaus_jump_to_error = 1
+endif
+
+
+" Define functions and commands
 
 function! s:PopulateListWithErrors()
   let l:items = py3eval('dicts')
   if len(l:items) > 0
     call setqflist(l:items, 'r')
-    :cc
+    if g:vim_axivion_bauhaus_jump_to_error
+      :cc
+    endif
+    if g:vim_axivion_bauhaus_open_error_list
+      :copen
+    endif
   else
     echo 'No errors parsed.'
   endif
