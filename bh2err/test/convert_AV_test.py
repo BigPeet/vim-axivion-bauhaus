@@ -3,11 +3,11 @@ import os.path
 
 DIRECTORY = os.path.dirname(__file__)
 AV_HEADER_STR = '"Id";"State";"Suppressed";"Violation Type";"Architecture Source";'\
-                                  '"Architecture Source Linkname";"Architecture Source Type";"Architecture Target";'\
-                                  '"Architecture Target Linkname";"Architecture Target Type";"Source Entity";'\
-                                  '"Source Linkname";"Source Entity Type";"Source Path";"Source Line";'\
-                                  '"Dependency Type";"Target Entity";"Target Linkname";"Target Entity Type";'\
-                                  '"Target Path";"Target Line";"Justification";"Tags"'
+    '"Architecture Source Linkname";"Architecture Source Type";"Architecture Target";'\
+    '"Architecture Target Linkname";"Architecture Target Type";"Source Entity";'\
+    '"Source Linkname";"Source Entity Type";"Source Path";"Source Line";'\
+    '"Dependency Type";"Target Entity";"Target Linkname";"Target Entity Type";'\
+    '"Target Path";"Target Line";"Justification";"Tags"'
 
 
 def test_AV_sane_examples():
@@ -87,7 +87,8 @@ def test_AV_suppressed_violations():
     dicts = bh2err.convert_text(AV_HEADER_STR + "\n" + suppressed_true, "", filter_suppressed=True)
     assert len(dicts) == 0
 
-    dicts = bh2err.convert_text(AV_HEADER_STR + "\n" + suppressed_false, "", filter_suppressed=False)
+    dicts = bh2err.convert_text(AV_HEADER_STR + "\n" + suppressed_false,
+                                "", filter_suppressed=False)
     assert len(dicts) == 1
     dicts = bh2err.convert_text(AV_HEADER_STR + "\n" + suppressed_none, "", filter_suppressed=False)
     assert len(dicts) == 1

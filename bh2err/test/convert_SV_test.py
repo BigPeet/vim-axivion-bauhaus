@@ -100,7 +100,8 @@ def test_SV_suppressed_violations():
     dicts = bh2err.convert_text(SV_HEADER_STR + "\n" + suppressed_true, "", filter_suppressed=True)
     assert len(dicts) == 0
 
-    dicts = bh2err.convert_text(SV_HEADER_STR + "\n" + suppressed_false, "", filter_suppressed=False)
+    dicts = bh2err.convert_text(SV_HEADER_STR + "\n" + suppressed_false,
+                                "", filter_suppressed=False)
     assert len(dicts) == 1
     dicts = bh2err.convert_text(SV_HEADER_STR + "\n" + suppressed_none, "", filter_suppressed=False)
     assert len(dicts) == 1

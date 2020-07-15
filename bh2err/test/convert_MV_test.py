@@ -2,8 +2,8 @@ import bh2err
 import os.path
 
 DIRECTORY = os.path.dirname(__file__)
-MV_HEADER_STR = '"Id";"State";"Suppressed";"Metric";"Description";"Entity";"Linkname";"Entity Type";'\
-                '"Path";"Line";"Value";"Min";"Max";"Severity";"Justification";"Tags"'
+MV_HEADER_STR = '"Id";"State";"Suppressed";"Metric";"Description";"Entity";"Linkname";'\
+                '"Entity Type";"Path";"Line";"Value";"Min";"Max";"Severity";"Justification";"Tags"'
 
 
 def test_MV_sane_examples():
@@ -43,8 +43,8 @@ def test_MV_sane_examples():
     assert file_dicts[4]["filename"] == "test/config.c"
     assert file_dicts[4]["lnum"] == 0
     assert file_dicts[4]["type"] == "E"
-    assert file_dicts[4]["text"] == "Metric.OO.WMC.One (Weighted Methods per Class based on 1): 28.0."\
-                                    " Allowed range: [0.0, 15.0]"
+    assert file_dicts[4]["text"] == "Metric.OO.WMC.One (Weighted Methods per Class based on 1): "\
+                                    " 28.0. Allowed range: [0.0, 15.0]"
 
     assert file_dicts[5]["filename"] == "test/file.c"
     assert file_dicts[5]["lnum"] == 33
@@ -108,7 +108,8 @@ def test_MV_suppressed_violations():
     dicts = bh2err.convert_text(MV_HEADER_STR + "\n" + suppressed_true, "", filter_suppressed=True)
     assert len(dicts) == 0
 
-    dicts = bh2err.convert_text(MV_HEADER_STR + "\n" + suppressed_false, "", filter_suppressed=False)
+    dicts = bh2err.convert_text(MV_HEADER_STR + "\n" + suppressed_false,
+                                "", filter_suppressed=False)
     assert len(dicts) == 1
     dicts = bh2err.convert_text(MV_HEADER_STR + "\n" + suppressed_none, "", filter_suppressed=False)
     assert len(dicts) == 1
