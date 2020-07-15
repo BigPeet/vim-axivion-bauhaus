@@ -60,7 +60,18 @@ EOF
   call s:PopulateListWithErrors()
 endfunction
 
+function! ConvertBauhausFromCommand(input)
+  let l:text = system(a:input)
+python3 << EOF
+content = vim.eval('l:text')
+bh_version = vim.eval('g:bauhaus_version')
+dicts = bh2err.convert_text(content, bh_version)
+EOF
+  call s:PopulateListWithErrors()
+endfunction
+
 command! -nargs=1 -complete=file ConvBh call ConvertBauhausFromFile(<f-args>)
-command! -nargs=+ ConvBhRaw call ConvertBauhausFromInput(<args>)
+command! -nargs=+ -complete=file ConvBhRaw call ConvertBauhausFromInput(<args>)
+command! -nargs=+ -complete=file ConvBhCmd call ConvertBauhausFromCommand(<q-args>)
 
 let g:vim_axivion_bauhaus_loaded = 1
