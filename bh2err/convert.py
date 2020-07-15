@@ -1,19 +1,17 @@
 import os.path
 import csv
 
-STYLE_VIOLATION_HEADERS = ["Id", "State", "Suppressed", "Error Number",
-                           "Message", "Entity", "Path", "Line", "Provider", "Severity",
-                           "Justification", "Tags"]
-ARCHITECTURE_VIOLATION_HEADERS = ["Id", "State", "Suppressed", "Violation Type", "Architecture Source",
-                                  "Architecture Source Linkname", "Architecture Source Type", "Architecture Target",
-                                  "Architecture Target Linkname", "Architecture Target Type", "Source Entity",
-                                  "Source Linkname", "Source Entity Type", "Source Path", "Source Line",
-                                  "Dependency Type", "Target Entity", "Target Linkname", "Target Entity Type",
-                                  "Target Path", "Target Line", "Justification", "Tags"]
-METRIC_VIOLATION_HEADERS = ["Id", "State", "Suppressed", "Metric", "Description", "Entity", "Linkname", "Entity Type",
-                            "Path", "Line", "Value", "Min", "Max", "Severity", "Justification", "Tags"]
+REQ_STYLE_VIOLATION_HEADERS = ["Error Number", "Message", "Path", "Line", "Severity"]
+REQ_ARCHITECTURE_VIOLATION_HEADERS = ["Violation Type", "Source Path", "Source Line",
+                                      "Target Linkname", "Source Linkname"]
+REQ_METRIC_VIOLATION_HEADERS = ["Metric", "Description", "Path", "Line", "Value", "Min", "Max",
+                                "Severity"]
 
 CSV_SEPARATOR = ";"
+
+
+def __compatible(headers, required):
+    return all(req in headers for req in required)
 
 
 def convert_file(path, version):
@@ -51,24 +49,24 @@ def convert_text(content, version, filter_suppressed=True):
                     break
                 entries.append(row)
 
-        if headers == STYLE_VIOLATION_HEADERS:
-            output = __convert_style_violations(entries)
-        elif headers == ARCHITECTURE_VIOLATION_HEADERS:
-            output = __convert_architecture_violations(entries)
-        elif headers == METRIC_VIOLATION_HEADERS:
-            output = __convert_metric_violations(entries)
+        if __compatible(headers, REQ_STYLE_VIOLATION_HEADERS):
+            output = __convert_style_violations(headers, entries)
+        elif __compatible(headers, REQ_ARCHITECTURE_VIOLATION_HEADERS):
+            output = __convert_architecture_violations(headers, entries)
+        elif __compatible(headers, REQ_METRIC_VIOLATION_HEADERS):
+            output = __convert_metric_violations(headers, entries)
 
     return output
 
 
-def __convert_style_violations(entries):
+def __convert_style_violations(headers, entries):
     violations = []
     for token in entries:
-        filename = token[STYLE_VIOLATION_HEADERS.index("Path")]
-        line_num = token[STYLE_VIOLATION_HEADERS.index("Line")]
-        message = token[STYLE_VIOLATION_HEADERS.index("Message")]
-        severity = token[STYLE_VIOLATION_HEADERS.index("Severity")]
-        error_num = token[STYLE_VIOLATION_HEADERS.index("Error Number")]
+        filename = token[headers.index("Path")]
+        line_num = token[headers.index("Line")]
+        message = token[headers.index("Message")]
+        severity = token[headers.index("Severity")]
+        error_num = token[headers.index("Error Number")]
 
         if line_num.isdigit():
             line_num = max(0, int(line_num))
@@ -99,14 +97,14 @@ def __convert_style_violations(entries):
     return violations
 
 
-def __convert_architecture_violations(entries):
+def __convert_architecture_violations(headers, entries):
     violations = []
     for token in entries:
-        filename = token[ARCHITECTURE_VIOLATION_HEADERS.index("Source Path")]
-        line_num = token[ARCHITECTURE_VIOLATION_HEADERS.index("Source Line")]
-        source_link = token[ARCHITECTURE_VIOLATION_HEADERS.index("Source Linkname")]
-        target_link = token[ARCHITECTURE_VIOLATION_HEADERS.index("Target Linkname")]
-        violation_type = token[ARCHITECTURE_VIOLATION_HEADERS.index("Violation Type")]
+        filename = token[headers.index("Source Path")]
+        line_num = token[headers.index("Source Line")]
+        source_link = token[headers.index("Source Linkname")]
+        target_link = token[headers.index("Target Linkname")]
+        violation_type = token[headers.index("Violation Type")]
 
         if line_num.isdigit():
             line_num = max(0, int(line_num))
@@ -134,17 +132,17 @@ def __convert_architecture_violations(entries):
     return violations
 
 
-def __convert_metric_violations(entries):
+def __convert_metric_violations(headers, entries):
     violations = []
     for token in entries:
-        filename = token[METRIC_VIOLATION_HEADERS.index("Path")]
-        line_num = token[METRIC_VIOLATION_HEADERS.index("Line")]
-        severity = token[METRIC_VIOLATION_HEADERS.index("Severity")]
-        metric = token[METRIC_VIOLATION_HEADERS.index("Metric")]
-        desc = token[METRIC_VIOLATION_HEADERS.index("Description")]
-        min_val = token[METRIC_VIOLATION_HEADERS.index("Min")]
-        max_val = token[METRIC_VIOLATION_HEADERS.index("Max")]
-        val = token[METRIC_VIOLATION_HEADERS.index("Value")]
+        filename = token[headers.index("Path")]
+        line_num = token[headers.index("Line")]
+        severity = token[headers.index("Severity")]
+        metric = token[headers.index("Metric")]
+        desc = token[headers.index("Description")]
+        min_val = token[headers.index("Min")]
+        max_val = token[headers.index("Max")]
+        val = token[headers.index("Value")]
 
         if line_num.isdigit():
             line_num = max(0, int(line_num))
