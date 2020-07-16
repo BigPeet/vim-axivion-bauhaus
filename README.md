@@ -51,6 +51,8 @@ Commands are executed with a leading `:` in the command line of VIM, e.g. `:COMM
 The following commands are added by this plugin:
 
 * `ConvBh <file>`
+* `ConvBhRaw <raw-csv-content>`
+* `ConvBhCmd <shell-cmd to provide csv-content>`, e.g. `:ConvBhCmd cat file.csv`
 
 ## Compatibility
 
