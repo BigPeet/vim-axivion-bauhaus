@@ -1,5 +1,7 @@
 # vim-axivion-bauhaus
 
+![bh2err module](https://github.com/BigPeet/vim-axivion-bauhaus/workflows/bh2err%20module/badge.svg)
+
 [Axivion's Bauhaus suite](https://www.axivion.com/en/p/products-60.html#produkte_bauhaussuite) provides a static code analysis for your projects.
 Found issues can be managed inside Axivion's dashboard and also exported to CSV files.
 This plugin aims to provide functionality to read in these CSV files into VIM to more easily jump to the problematic locations inside your code.
