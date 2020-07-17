@@ -7,6 +7,7 @@ REQ_ARCHITECTURE_VIOLATION_HEADERS = ["Violation Type", "Source Path", "Source L
 REQ_METRIC_VIOLATION_HEADERS = ["Metric", "Description", "Path", "Line", "Value", "Min", "Max",
                                 "Severity"]
 REQ_DEAD_CODE_HEADERS = ["Linkname", "Path", "Line"]
+REQ_CLONE_HEADERS = ["Left Path", "Left Line", "Right Path", "Right Line"]
 CSV_SEPARATOR = ";"
 
 
@@ -57,6 +58,8 @@ def convert_text(content, version, filter_suppressed=True):
             output = __convert_metric_violations(headers, entries)
         elif __compatible(headers, REQ_DEAD_CODE_HEADERS):
             output = __convert_dead_code_violations(headers, entries)
+        elif __compatible(headers, REQ_CLONE_HEADERS):
+            output = __convert_clone_violations(headers, entries)
 
     return output
 
@@ -201,4 +204,59 @@ def __convert_dead_code_violations(headers, entries):
         violation["lnum"] = line_num
         violation["text"] = text
         violations.append(violation)
+    return violations
+
+
+def __convert_clone_violations(headers, entries):
+    violations = []
+    for token in entries:
+        left_path = token[headers.index("Left Path")]
+        left_line = token[headers.index("Left Line")]
+        right_path = token[headers.index("Right Path")]
+        right_line = token[headers.index("Right Line")]
+
+        if left_line.isdigit():
+            left_line = max(0, int(left_line))
+        else:
+            left_line = 0
+
+        if right_line.isdigit():
+            right_line = max(0, int(right_line))
+        else:
+            right_line = 0
+
+        left_text = ""
+        right_text = ""
+        if left_path:
+            if right_path:
+                if right_path == left_path:
+                    left_text = "Clone at line " + str(right_line)
+                else:
+                    left_text = "Clone of " + right_path + ":" + str(right_line)
+                left_text += " (next item)"
+            else:
+                left_text = "Cloned entity."
+        if right_path:
+            if left_path:
+                if right_path == left_path:
+                    right_text = "Clone at line " + str(left_line)
+                else:
+                    right_text = "Clone of " + left_path + ":" + str(left_line)
+                right_text += " (previous item)"
+            else:
+                right_text = "Cloned entity."
+
+        if left_text:
+            left_violation = dict()
+            left_violation["filename"] = left_path
+            left_violation["lnum"] = left_line
+            left_violation["text"] = left_text
+            violations.append(left_violation)
+
+        if right_text:
+            right_violation = dict()
+            right_violation["filename"] = right_path
+            right_violation["lnum"] = right_line
+            right_violation["text"] = right_text
+            violations.append(right_violation)
     return violations
