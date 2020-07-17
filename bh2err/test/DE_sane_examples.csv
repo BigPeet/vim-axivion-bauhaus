@@ -1,0 +1,7 @@
+"Id";"State";"Suppressed";"Entity";"Linkname";"Entity Type";"Path";"Line";"Justification";"Tags"
+"test-component:DE1";"added";"false";"GetID";"my::ns::Class::GetID()";"Method";"test/file.c";"1904";"";""
+"test-component:DE2";"added";"false";"GetAddress";"my::ns::Class::GetAddress()-c";"Method";"test/file.h";"100";"";""
+"test-component:DE3";"added";"false";"";"";"";"real/file.c";"42";"";""
+"test-component:DE4";"added";"false";"Wait";"Wait()";"Method";"real/test.c";"4";"";""
+"test-component:DE5";"added";"false";"";"";"";"test/config.c";"0";"";""
+"test-component:DE6";"added";"true";"";"";"";"test/config.c";"0";"";""
