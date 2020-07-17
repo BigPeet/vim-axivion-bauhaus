@@ -1,0 +1,7 @@
+"Id";"State";"Suppressed";"Clone Type";"Left Path";"Left Line";"Left End Line";"Left Length";"Left Weight";"Right Path";"Right Line";"Right End Line";"Right Length";"Right Weight";"Justification";"Tags"
+"test-component:CL1";"added";"false";"0";"test/test.c";"100";"120";"21";"0";"test/test.c";"200";"222";"23";"0";"";""
+"test-component:CL2";"added";"false";"1";"test/test.h";"123";"222";"100";"250";"test/another.h";"123";"222";"100";"250";"";""
+"test-component:CL3";"added";"false";"2";"real/test.c";"42";"78";"37";"50";"";"0";"0";"0";"50";"";""
+"test-component:CL4";"added";"false";"3";"";"0";"0";"0";"2";"real/config.c";"123";"321";"115";"50";"";""
+"test-component:CL5";"added";"false";"4";"";"";"";"";"";"";"";"";"";"";"";""
+"test-component:CL6";"added";"true";"4";"";"";"";"";"";"";"";"";"";"";"";""
