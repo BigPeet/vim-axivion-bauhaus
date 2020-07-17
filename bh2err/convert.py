@@ -6,7 +6,7 @@ REQ_ARCHITECTURE_VIOLATION_HEADERS = ["Violation Type", "Source Path", "Source L
                                       "Target Linkname", "Source Linkname"]
 REQ_METRIC_VIOLATION_HEADERS = ["Metric", "Description", "Path", "Line", "Value", "Min", "Max",
                                 "Severity"]
-
+REQ_DEAD_CODE_HEADERS = ["Linkname", "Path", "Line"]
 CSV_SEPARATOR = ";"
 
 
@@ -55,6 +55,8 @@ def convert_text(content, version, filter_suppressed=True):
             output = __convert_architecture_violations(headers, entries)
         elif __compatible(headers, REQ_METRIC_VIOLATION_HEADERS):
             output = __convert_metric_violations(headers, entries)
+        elif __compatible(headers, REQ_DEAD_CODE_HEADERS):
+            output = __convert_dead_code_violations(headers, entries)
 
     return output
 
@@ -174,5 +176,29 @@ def __convert_metric_violations(headers, entries):
             violation["type"] = ""
         violation["nr"] = metric
 
+        violations.append(violation)
+    return violations
+
+
+def __convert_dead_code_violations(headers, entries):
+    violations = []
+    for token in entries:
+        filename = token[headers.index("Path")]
+        line_num = token[headers.index("Line")]
+        link_name = token[headers.index("Linkname")]
+
+        if line_num.isdigit():
+            line_num = max(0, int(line_num))
+        else:
+            line_num = 0
+
+        text = ""
+        if link_name:
+            text = link_name
+
+        violation = dict()
+        violation["filename"] = filename
+        violation["lnum"] = line_num
+        violation["text"] = text
         violations.append(violation)
     return violations
