@@ -64,6 +64,12 @@ def convert_text(content, version, filter_suppressed=True):
     return output
 
 
+def __sanitize_line(line_num):
+    if line_num.isdigit():
+        return max(0, int(line_num))
+    return 0
+
+
 def __convert_style_violations(headers, entries):
     violations = []
     for token in entries:
@@ -73,10 +79,7 @@ def __convert_style_violations(headers, entries):
         severity = token[headers.index("Severity")]
         error_num = token[headers.index("Error Number")]
 
-        if line_num.isdigit():
-            line_num = max(0, int(line_num))
-        else:
-            line_num = 0
+        line_num = __sanitize_line(line_num)
 
         text = ""
         if error_num and message:
@@ -111,10 +114,7 @@ def __convert_architecture_violations(headers, entries):
         target_link = token[headers.index("Target Linkname")]
         violation_type = token[headers.index("Violation Type")]
 
-        if line_num.isdigit():
-            line_num = max(0, int(line_num))
-        else:
-            line_num = 0
+        line_num = __sanitize_line(line_num)
 
         text = ""
         if source_link and target_link:
@@ -149,10 +149,7 @@ def __convert_metric_violations(headers, entries):
         max_val = token[headers.index("Max")]
         val = token[headers.index("Value")]
 
-        if line_num.isdigit():
-            line_num = max(0, int(line_num))
-        else:
-            line_num = 0
+        line_num = __sanitize_line(line_num)
 
         text = ""
         if metric and desc:
@@ -190,10 +187,7 @@ def __convert_dead_code_violations(headers, entries):
         line_num = token[headers.index("Line")]
         link_name = token[headers.index("Linkname")]
 
-        if line_num.isdigit():
-            line_num = max(0, int(line_num))
-        else:
-            line_num = 0
+        line_num = __sanitize_line(line_num)
 
         text = ""
         if link_name:
@@ -215,15 +209,8 @@ def __convert_clone_violations(headers, entries):
         right_path = token[headers.index("Right Path")]
         right_line = token[headers.index("Right Line")]
 
-        if left_line.isdigit():
-            left_line = max(0, int(left_line))
-        else:
-            left_line = 0
-
-        if right_line.isdigit():
-            right_line = max(0, int(right_line))
-        else:
-            right_line = 0
+        left_line = __sanitize_line(left_line)
+        right_line = __sanitize_line(right_line)
 
         left_text = ""
         right_text = ""
