@@ -1,0 +1,6 @@
+"Id";"State";"Suppressed";"Source Entity";"Source Linkname";"Source Entity Type";"Dependency Type";"Source Path";"Source Line";"Target Entity";"Target Linkname";"Target Entity Type";"Target Path";"Target Line";"Justification";"Tags"
+"test-component:CY01";"added";"false";"Source Entity";"class A";"Source Entity Type";"Cyclic Dependency";"test/file.c";"42";"Target Entity";"struct H";"Target Entity Type";"Target Path";"Target Line";"Justification";"Tags"
+"test-component:CY02";"added";"false";"Source Entity";"class A";"Source Entity Type";"";"test/file.c";"42";"Target Entity";"struct H";"Target Entity Type";"Target Path";"Target Line";"Justification";"Tags"
+"test-component:CY03";"added";"false";"Source Entity";"";"Source Entity Type";"Cyclic Dependency";"test/file.c";"42";"Target Entity";"struct H";"Target Entity Type";"Target Path";"Target Line";"Justification";"Tags"
+"test-component:CY04";"added";"false";"Source Entity";"";"Source Entity Type";"Cyclic Dependency";"test/file.c";"42";"Target Entity";"";"Target Entity Type";"Target Path";"Target Line";"Justification";"Tags"
+"test-component:CY05";"added";"false";"Source Entity";"class A";"Source Entity Type";"";"test/file.c";"42";"Target Entity";"";"Target Entity Type";"Target Path";"Target Line";"Justification";"Tags"
