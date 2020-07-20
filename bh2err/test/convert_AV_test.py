@@ -44,15 +44,11 @@ def test_AV_empty_entry():
     content = AV_HEADER_STR + "\n" + 22 * '"";' + '""'
     print(content)
     dicts = bh2err.convert_text(content, "")
-    assert len(dicts) == 1
-    assert dicts[0]["filename"] == ""
-    assert dicts[0]["lnum"] == 0
-    assert dicts[0]["type"] == ""
-    assert dicts[0]["text"] == ""
+    assert len(dicts) == 0
 
 
 def test_AV_invalid_line_num():
-    line_num_pattern = 14 * '"";' + '"{}";' + 7 * '"";' + '""'
+    line_num_pattern = 13 * '"";' + '"path";"{}";' + 7 * '"";' + '""'
     negative_line_num = line_num_pattern.format(-13)
     nonexistent_line_num = line_num_pattern.format("")
     nan_line_num = line_num_pattern.format("test")
@@ -68,7 +64,7 @@ def test_AV_invalid_line_num():
 
 
 def test_AV_suppressed_violations():
-    line_pattern = 2 * '"";' + '"{}";' + 19 * '"";' + '""'
+    line_pattern = 2 * '"";' + '"{}";' + 10 * '"";' + '"path";' + 8 * '"";' + '""'
     suppressed_false = line_pattern.format("false")
     suppressed_true = line_pattern.format("true")
     suppressed_none = line_pattern.format("")

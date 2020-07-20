@@ -17,16 +17,18 @@ class DEParser(base_parser.BaseParser):
     def process_tokens(cls, parsed_tokens):
         violations = []
         if parsed_tokens:
-            line_num = cls.sanitize_line(parsed_tokens["line_num"])
-            link_name = parsed_tokens["link_name"]
+            filename = parsed_tokens["filename"]
+            if len(filename) > 0:
+                line_num = cls.sanitize_line(parsed_tokens["line_num"])
+                link_name = parsed_tokens["link_name"]
 
-            text = ""
-            if link_name:
-                text = link_name
+                text = ""
+                if link_name:
+                    text = link_name
 
-            violation = dict()
-            violation["filename"] = parsed_tokens["filename"]
-            violation["lnum"] = line_num
-            violation["text"] = text
-            violations.append(violation)
+                violation = dict()
+                violation["filename"] = filename
+                violation["lnum"] = line_num
+                violation["text"] = text
+                violations.append(violation)
         return violations

@@ -19,29 +19,31 @@ class SVParser(base_parser.BaseParser):
     def process_tokens(cls, parsed_tokens):
         violations = []
         if parsed_tokens:
-            line_num = cls.sanitize_line(parsed_tokens["line_num"])
-            error_num = parsed_tokens["error_num"]
-            message = parsed_tokens["message"]
-            severity = parsed_tokens["severity"]
+            filename = parsed_tokens["filename"]
+            if len(filename) > 0:
+                line_num = cls.sanitize_line(parsed_tokens["line_num"])
+                error_num = parsed_tokens["error_num"]
+                message = parsed_tokens["message"]
+                severity = parsed_tokens["severity"]
 
-            text = ""
-            if error_num and message:
-                text = error_num + ": " + message
-            elif error_num:
-                text = error_num
-            elif message:
-                text = message
+                text = ""
+                if error_num and message:
+                    text = error_num + ": " + message
+                elif error_num:
+                    text = error_num
+                elif message:
+                    text = message
 
-            violation = dict()
-            violation["filename"] = parsed_tokens["filename"]
-            violation["lnum"] = line_num
-            violation["text"] = text
-            if severity == "warning" or severity == "advisory":
-                violation["type"] = "W"
-            elif severity:
-                violation["type"] = "E"
-            else:
-                violation["type"] = ""
-            violation["nr"] = error_num
-            violations.append(violation)
+                violation = dict()
+                violation["filename"] = filename
+                violation["lnum"] = line_num
+                violation["text"] = text
+                if severity == "warning" or severity == "advisory":
+                    violation["type"] = "W"
+                elif severity:
+                    violation["type"] = "E"
+                else:
+                    violation["type"] = ""
+                violation["nr"] = error_num
+                violations.append(violation)
         return violations

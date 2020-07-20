@@ -49,15 +49,11 @@ def test_SV_sane_examples():
 def test_SV_empty_entry():
     content = SV_HEADER_STR + "\n" + 11 * '"";' + '""'
     dicts = bh2err.convert_text(content, "")
-    assert len(dicts) == 1
-    assert dicts[0]["filename"] == ""
-    assert dicts[0]["lnum"] == 0
-    assert dicts[0]["type"] == ""
-    assert dicts[0]["text"] == ""
+    assert len(dicts) == 0
 
 
 def test_SV_invalid_line_num():
-    line_num_pattern = 7 * '"";' + '"{}";' + 3 * '"";' + '""'
+    line_num_pattern = 6 * '"";' + '"path";"{}";' + 3 * '"";' + '""'
     negative_line_num = line_num_pattern.format(-13)
     nonexistent_line_num = line_num_pattern.format("")
     nan_line_num = line_num_pattern.format("test")
@@ -74,14 +70,14 @@ def test_SV_invalid_line_num():
 
 def test_SV_semicolon_and_linebreak_in_text():
     msg = 'Message ; \\n interrupted; by ; and \\n; '
-    content = 4 * '"";' + '"' + msg + '";' + 6 * '"";' + '""'
+    content = 4 * '"";' + '"' + msg + '";"";"path;"' + 4 * '"";' + '""'
     dicts = bh2err.convert_text(SV_HEADER_STR + "\n" + content, "")
     assert len(dicts) == 1
     assert dicts[0]["text"] == msg
 
 
 def test_SV_suppressed_violations():
-    line_pattern = 2 * '"";' + '"{}";' + 8 * '"";' + '""'
+    line_pattern = 2 * '"";' + '"{}";' + 3 * '"";' + '"path";' + 4 * '"";' + '""'
     suppressed_false = line_pattern.format("false")
     suppressed_true = line_pattern.format("true")
     suppressed_none = line_pattern.format("")

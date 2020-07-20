@@ -52,15 +52,11 @@ def test_CY_empty_entry():
     content = CY_HEADER_STR + "\n" + 15 * '"";' + '""'
     print(content)
     dicts = bh2err.convert_text(content, "")
-    assert len(dicts) == 1
-    assert dicts[0]["filename"] == ""
-    assert dicts[0]["lnum"] == 0
-    assert dicts[0]["type"] == ""
-    assert dicts[0]["text"] == ""
+    assert len(dicts) == 0
 
 
 def test_CY_invalid_line_num():
-    line_num_pattern = 8 * '"";' + '"{}";' + 6 * '"";' + '""'
+    line_num_pattern = 7 * '"";' + '"path";"{}";' + 6 * '"";' + '""'
     negative_line_num = line_num_pattern.format(-13)
     nonexistent_line_num = line_num_pattern.format("")
     nan_line_num = line_num_pattern.format("test")
@@ -76,7 +72,7 @@ def test_CY_invalid_line_num():
 
 
 def test_CY_suppressed_violations():
-    line_pattern = 2 * '"";' + '"{}";' + 12 * '"";' + '""'
+    line_pattern = 2 * '"";' + '"{}";' + 4 * '"";' + '"path";' + 7 * '"";' + '""'
     suppressed_false = line_pattern.format("false")
     suppressed_true = line_pattern.format("true")
     suppressed_none = line_pattern.format("")
