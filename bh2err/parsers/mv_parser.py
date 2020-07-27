@@ -1,7 +1,7 @@
-import bh2err.parsers.base_parser as base_parser
+from .base_parser import BaseParser
 
 
-class MVParser(base_parser.BaseParser):
+class MVParser(BaseParser):
 
     mapping = {
       "Path": "filename",

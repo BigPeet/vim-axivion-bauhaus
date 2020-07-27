@@ -1,7 +1,7 @@
-import bh2err.parsers.base_parser as base_parser
+from .base_parser import BaseParser
 
 
-class AVParser(base_parser.BaseParser):
+class AVParser(BaseParser):
 
     mapping = {
       "Source Path": "filename",

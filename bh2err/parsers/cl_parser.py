@@ -1,7 +1,7 @@
-import bh2err.parsers.base_parser as base_parser
+from .base_parser import BaseParser
 
 
-class CLParser(base_parser.BaseParser):
+class CLParser(BaseParser):
 
     mapping = {
       "Left Path": "left_path",

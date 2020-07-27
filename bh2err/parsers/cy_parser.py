@@ -1,7 +1,7 @@
-import bh2err.parsers.base_parser as base_parser
+from .base_parser import BaseParser
 
 
-class CYParser(base_parser.BaseParser):
+class CYParser(BaseParser):
 
     mapping = {
       "Dependency Type": "dependency_type",
