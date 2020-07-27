@@ -10,7 +10,7 @@ on:
     branches: [ master ]
 
 jobs:
-  build-with-3.8:
+  buildWith38:
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v2
@@ -37,7 +37,7 @@ jobs:
         find bh2err -name "*pycache*" | xargs rm -rf
         python3 -c "import bh2err"
 
-  build-with-3.6:
+  buildWith36:
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v2
