@@ -252,3 +252,24 @@ def test_SV_wild_combination():
     assert file_dicts[4]["lnum"] == 0
     assert file_dicts[4]["type"] == "E"
     assert file_dicts[4]["text"] == "Error 42: This should be found again."
+
+
+def test_SV_nonkeyword_filter():
+    path = DIRECTORY + "/SV_sane_examples.csv"
+    filters = ["Id::SV01"]
+
+    file_dicts = bh2err.convert_file(path, "", filters=filters)
+    content_dicts = []
+    with open(path, "r") as f:
+        content = f.read()
+        content_dicts = bh2err.convert_text(content, "", input_filters=filters)
+
+    assert file_dicts != []
+    assert len(file_dicts) == 1
+    assert content_dicts != []
+    assert content_dicts == file_dicts
+
+    assert file_dicts[0]["filename"] == "test/file.c"
+    assert file_dicts[0]["lnum"] == 37
+    assert file_dicts[0]["type"] == "E"
+    assert file_dicts[0]["text"] == "Error 42: You didn't say the magic word."

@@ -6,6 +6,7 @@ FILTER_TYPES = {
     "clone": "Clone Type",  # for CL
     "path": "Path",
     "severity": "Severity",
+    "message": "Message",
 }
 
 
@@ -36,11 +37,13 @@ def parse_filter(input_filter):
         filter_type = tokens[0]
         if filter_type in FILTER_TYPES.keys():
             header = FILTER_TYPES[filter_type]
-            mode = tokens[1]
-            mode_op, combine_op = parse_mode(mode)
-            patterns = tokens[2].split(";")
-            def parsed(row, headers):
-                return combine_op([mode_op(row[headers.index(header)], pattern) for pattern in patterns])
+        else:
+            header = filter_type
+        mode = tokens[1]
+        mode_op, combine_op = parse_mode(mode)
+        patterns = tokens[2].split(";")
+        def parsed(row, headers):
+            return combine_op([mode_op(row[headers.index(header)], pattern) for pattern in patterns])
 
     return parsed
 
