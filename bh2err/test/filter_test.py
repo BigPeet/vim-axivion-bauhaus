@@ -169,6 +169,27 @@ def test_SV_negation_filter():
     assert file_dicts[2]["text"] == "You didn't say the magic word."
 
 
+def test_SV_multiple_filters():
+    path = DIRECTORY + "/SV_sane_examples.csv"
+    filters = ["error:-:42", "message::magic"]
+
+    file_dicts = bh2err.convert_file(path, "", filters=filters)
+    content_dicts = []
+    with open(path, "r") as f:
+        content = f.read()
+        content_dicts = bh2err.convert_text(content, "", input_filters=filters)
+
+    assert file_dicts != []
+    assert len(file_dicts) == 1
+    assert content_dicts != []
+    assert content_dicts == file_dicts
+
+    assert file_dicts[0]["filename"] == "real/file.c"
+    assert file_dicts[0]["lnum"] == 49
+    assert file_dicts[0]["type"] == "W"
+    assert file_dicts[0]["text"] == "You didn't say the magic word."
+
+
 def test_SV_exact_filter():
     path = DIRECTORY + "/SV_sane_examples.csv"
 
