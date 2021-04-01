@@ -37,7 +37,7 @@ Alternatively, use your preferred 3rd-party plugin manager, e.g. pathogen or Vun
 
 ## How to use
 
-1. Export the CSV files you are interested in from Bauhaus. Currently only Style Violations are supported.
+1. Export the CSV files you are interested in from Bauhaus. Main focus is on Style Violations. Other kind of violations might not work properly.
 2. The paths inside the CSV should be relative to your project's top directory (referred to as `$PROJ_DIR` from now on).
 3. Either open VIM inside `$PROJ_DIR` or set it inside VIM with `:cd $PROJ_DIR`.
 4. Execute a convert command, e.g. `:ConvBh <PATH-TO-CSV>`
@@ -50,9 +50,39 @@ Commands are executed with a leading `:` in the command line of VIM, e.g. `:COMM
 
 The following commands are added by this plugin:
 
-* `ConvBh <file>`
+* `ConvBh <file> [<filter-options>]`
 * `ConvBhRaw <raw-csv-content>`
 * `ConvBhCmd <shell-cmd to provide csv-content>`, e.g. `:ConvBhCmd cat file.csv`
+
+### Filter Options
+
+Some of the commands can take `<filter-options>` to filter the violations, e.g. by error number, file path or severity.
+Using filter-options is optional.
+(Note: Currently suppressed violations are always filtered.)
+Multiple filter-options can be used in the same call.
+They will be concatenated with AND, i.e. each violation must pass all filters.
+Each filter-option must have the following form:
+
+`type:mode:pattern[;pattern]*`
+
+* type: The column to be filtered (e.g. error, path, severity)
+    * Some columns are key-worded for ease-of-use (e.g. the "Error Number" column is keyworded as "error").
+    * If a column has no keyword, then its full name can be used.
+* mode:
+    * default (leave empty): Check if the pattern is contained in the field.
+    * exact (!): Check if the pattern is equal to the field.
+    * negate (-): Will negate the result
+* pattern:
+    * The pattern to be searched for.
+    * Multiple patterns can be specified (separated by ;) and are concatenated with OR, i.e. each violation must only pass at least one of the patterns.
+
+Examples:
+
+* `error::M6` will only show violations which contain M6 in their error number.
+* `path::%` will only show violations which contain the current file in their path.
+* `severity:!:required;advisory` will only show violations whose severity field is exactly required or advisory.
+* `path:-:/usr` will remove all findings whose path includes "/usr"
+* `Id:!-:SV01` will show all findings whose Id column is not exactly "SV01".
 
 ## Compatibility
 

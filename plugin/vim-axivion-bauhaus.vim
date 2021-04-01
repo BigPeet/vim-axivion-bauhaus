@@ -53,13 +53,14 @@ function! s:PopulateListWithErrors()
   endif
 endfunction
 
-function! ConvertBauhausFromFile(path)
+function! ConvertBauhausFromFile(path, ...)
 
   if filereadable(a:path)
 python3 << EOF
 path = vim.eval('a:path')
 bh_version = vim.eval('g:bauhaus_version')
-dicts = bh2err.convert_file(path, bh_version)
+user_filters = vim.eval('a:000')
+dicts = bh2err.convert_file(path, bh_version, user_filters)
 EOF
     call s:PopulateListWithErrors()
   else
@@ -87,7 +88,7 @@ EOF
   call s:PopulateListWithErrors()
 endfunction
 
-command! -nargs=1 -complete=file ConvBh call ConvertBauhausFromFile(<f-args>)
+command! -nargs=+ -complete=file ConvBh call ConvertBauhausFromFile(<f-args>)
 command! -nargs=+ -complete=file ConvBhRaw call ConvertBauhausFromInput(<args>)
 command! -nargs=+ -complete=file ConvBhCmd call ConvertBauhausFromCommand(<q-args>)
 
