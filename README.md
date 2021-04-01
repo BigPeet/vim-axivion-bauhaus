@@ -79,6 +79,7 @@ Each filter-option must have the following form:
 Examples:
 
 * `error::M6` will only show violations which contain M6 in their error number.
+* `path::%` will only show violations which contain the current file in their path.
 * `severity:!:required;advisory` will only show violations whose severity field is exactly required or advisory.
 * `path:-:/usr` will remove all findings whose path includes "/usr"
 * `Id:!-:SV01` will show all findings whose Id column is not exactly "SV01".
