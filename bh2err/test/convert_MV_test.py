@@ -16,7 +16,7 @@ def test_MV_sane_examples():
         content_dicts = bh2err.convert_text(content, "")
 
     assert file_dicts != []
-    assert len(file_dicts) == 8
+    assert len(file_dicts) == 9
     assert content_dicts != []
     assert content_dicts == file_dicts
 
@@ -60,6 +60,11 @@ def test_MV_sane_examples():
     assert file_dicts[7]["lnum"] == 33
     assert file_dicts[7]["type"] == "W"
     assert file_dicts[7]["text"] == "Metric.HIS.RETURN (HIS RETURN): 6.0."
+
+    assert file_dicts[8]["filename"] == "test/file.c"
+    assert file_dicts[8]["lnum"] == 33
+    assert file_dicts[8]["type"] == "W"
+    assert file_dicts[8]["text"] == "Metric.HIS.RETURN (HIS RETURN): 6.0."
 
 
 def test_MV_empty_entry():

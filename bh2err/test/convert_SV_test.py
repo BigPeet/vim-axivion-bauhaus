@@ -16,7 +16,7 @@ def test_SV_sane_examples():
         content_dicts = bh2err.convert_text(content, "")
 
     assert file_dicts != []
-    assert len(file_dicts) == 5
+    assert len(file_dicts) == 6
     assert content_dicts != []
     assert content_dicts == file_dicts
 
@@ -44,6 +44,11 @@ def test_SV_sane_examples():
     assert file_dicts[4]["lnum"] == 0
     assert file_dicts[4]["type"] == "E"
     assert file_dicts[4]["text"] == "Error 42: You didn't say the magic word."
+
+    assert file_dicts[5]["filename"] == "test/config.c"
+    assert file_dicts[5]["lnum"] == 0
+    assert file_dicts[5]["type"] == "E"
+    assert file_dicts[5]["text"] == "Error 42: This should be found again."
 
 
 def test_SV_empty_entry():

@@ -5,3 +5,4 @@
 "efgh-component:SV04";"added";"false";"";"You didn't say the magic word.";"";"real/file.c";"49";"";"advisory";"";""
 "äöüß-component:SV05";"added";"";"Error 42";"You didn't say the magic word.";"";"test/config.c";"0";"";"required";"";""
 "äöüß-component:SV06";"added";"true";"Error 42";"You didn't say the magic word.";"";"test/config.c";"0";"";"required";"";""
+"äöüß-component:SV07";"added";"false";"Error 42";"This should be found again.";"";"test/config.c";"0";"";"required";"";""

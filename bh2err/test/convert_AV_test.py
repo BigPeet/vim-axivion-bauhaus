@@ -20,7 +20,7 @@ def test_AV_sane_examples():
         content_dicts = bh2err.convert_text(content, "")
 
     assert file_dicts != []
-    assert len(file_dicts) == 3
+    assert len(file_dicts) == 4
     assert content_dicts != []
     assert content_dicts == file_dicts
 
@@ -38,6 +38,11 @@ def test_AV_sane_examples():
     assert file_dicts[2]["lnum"] == 42
     assert file_dicts[2]["type"] == ""
     assert file_dicts[2]["text"] == "T custom:size_type -> T std:some_size"
+
+    assert file_dicts[3]["filename"] == "test/file.h"
+    assert file_dicts[3]["lnum"] == 42
+    assert file_dicts[3]["type"] == ""
+    assert file_dicts[3]["text"] == "T custom:size_type -> T std:some_size"
 
 
 def test_AV_empty_entry():

@@ -4,3 +4,5 @@
 "test-component:CY03";"added";"false";"Source Entity";"";"Source Entity Type";"Cyclic Dependency";"test/file.c";"42";"Target Entity";"struct H";"Target Entity Type";"Target Path";"Target Line";"Justification";"Tags"
 "test-component:CY04";"added";"false";"Source Entity";"";"Source Entity Type";"Cyclic Dependency";"test/file.c";"42";"Target Entity";"";"Target Entity Type";"Target Path";"Target Line";"Justification";"Tags"
 "test-component:CY05";"added";"false";"Source Entity";"class A";"Source Entity Type";"";"test/file.c";"42";"Target Entity";"";"Target Entity Type";"Target Path";"Target Line";"Justification";"Tags"
+"test-component:CY06";"added";"true";"Source Entity";"class A";"Source Entity Type";"";"test/file.c";"42";"Target Entity";"";"Target Entity Type";"Target Path";"Target Line";"Justification";"Tags"
+"test-component:CY07";"added";"false";"Source Entity";"class A";"Source Entity Type";"";"test/file.c";"42";"Target Entity";"";"Target Entity Type";"Target Path";"Target Line";"Justification";"Tags"

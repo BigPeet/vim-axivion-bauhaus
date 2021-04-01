@@ -17,7 +17,7 @@ def test_CL_sane_examples():
         content_dicts = bh2err.convert_text(content, "")
 
     assert file_dicts != []
-    assert len(file_dicts) == 6
+    assert len(file_dicts) == 8
     assert content_dicts != []
     assert content_dicts == file_dicts
 
@@ -44,6 +44,14 @@ def test_CL_sane_examples():
     assert file_dicts[5]["filename"] == "real/config.c"
     assert file_dicts[5]["lnum"] == 123
     assert file_dicts[5]["text"] == "Cloned entity."
+
+    assert file_dicts[6]["filename"] == "test/test.c"
+    assert file_dicts[6]["lnum"] == 100
+    assert file_dicts[6]["text"] == "Clone at line 200 (next item)"
+
+    assert file_dicts[7]["filename"] == "test/test.c"
+    assert file_dicts[7]["lnum"] == 200
+    assert file_dicts[7]["text"] == "Clone at line 100 (previous item)"
 
 
 def test_CL_empty_entry():

@@ -5,3 +5,4 @@
 "test-component:CL4";"added";"false";"3";"";"0";"0";"0";"2";"real/config.c";"123";"321";"115";"50";"";""
 "test-component:CL5";"added";"false";"4";"";"";"";"";"";"";"";"";"";"";"";""
 "test-component:CL6";"added";"true";"4";"";"";"";"";"";"";"";"";"";"";"";""
+"test-component:CL7";"added";"false";"0";"test/test.c";"100";"120";"21";"0";"test/test.c";"200";"222";"23";"0";"";""

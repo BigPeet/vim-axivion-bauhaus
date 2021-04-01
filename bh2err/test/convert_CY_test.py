@@ -18,7 +18,7 @@ def test_CY_sane_examples():
         content_dicts = bh2err.convert_text(content, "")
 
     assert file_dicts != []
-    assert len(file_dicts) == 5
+    assert len(file_dicts) == 6
     assert content_dicts != []
     assert content_dicts == file_dicts
 
@@ -46,6 +46,11 @@ def test_CY_sane_examples():
     assert file_dicts[4]["lnum"] == 42
     assert file_dicts[4]["type"] == ""
     assert file_dicts[4]["text"] == "class A"
+
+    assert file_dicts[5]["filename"] == "test/file.c"
+    assert file_dicts[5]["lnum"] == 42
+    assert file_dicts[5]["type"] == ""
+    assert file_dicts[5]["text"] == "class A"
 
 
 def test_CY_empty_entry():
