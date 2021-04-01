@@ -36,7 +36,7 @@ def convert_text(content, version, filter_suppressed=True):
                 # this is fine for now, but maybe split this up into separate steps
                 # if slower filters are introduced
                 if any([f(row, headers) for f in filters]):
-                    break
+                    continue
                 entries.append(row)
 
         for parser in Parsers:
