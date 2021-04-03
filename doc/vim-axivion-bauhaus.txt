@@ -1,0 +1,101 @@
+*vim-axivion-bauhaus.txt* Vim plugin to integrate Axivion's Bauhaus CSV files
+
+Author: pwolf2310@gmail.com
+
+
+INTRODUCTION                                         *vim-axivion-bauhaus*
+
+Axivion's Bauhaus suite provides a static code analysis for your projects.
+Found issues can be managed inside Axivion's dashboard and also exported to CSV files.
+This plugin aims to provide functionality to read in these CSV files into VIM to more easily jump to the problematic locations inside your code.
+
+To achieve this, the CVS content is parsed and afterwards written into VIM's quickfix list (see `:help quickfix`).
+
+
+REQUIREMENTS                                         *vim-axivion-bauhaus-requirements*
+
+This plugin uses Python3.
+Your system needs to have Python3. Try running `python3 --version` to see, if you have Python3 installed.
+If you don't have Python3 installed, you can install it from https://www.python.org/downloads/.
+
+Your VIM also needs to be compiled with Python3. Check the output of `vim --version` for `+python3`.
+
+
+HOW TO USE                                           *vim-axivion-bauhaus-howto*
+
+1. Export the CSV files you are interested in from Bauhaus. Main focus is on Style Violations. Other kind of violations might not work properly.
+2. The paths inside the CSV should be relative to your project's top directory (referred to as `$PROJ_DIR` from now on).
+3. Either open VIM inside `$PROJ_DIR` or set it inside VIM with `:cd $PROJ_DIR`.
+4. Execute a convert command, e.g. `:ConvBh <PATH-TO-CSV>`
+5. Depending on your configuration, your quickfix list should open and VIM should jump to the first issue.
+    * To learn how to navigate the quickfix list, see `:help quickfix`.
+
+
+COMMANDS                                             *vim-axivion-bauhaus-commands*
+
+The following commands are added by this plugin:
+
+                                                     *:ConvBh*
+:ConvBh {csv-file} {filter-options}       Parse the given CSV file and populate the quickfix list
+                                          with the violations.
+                                          Filter options can be provided to prevent violations being
+                                          added to the list (see |vim-axivion-bauhaus-filters|).
+
+                                                     *:ConvBhRaw*
+:ConvBhRaw {raw-csv-content}              Parse the given content as CSV text and populate the
+                                          quickfix list with violations.
+
+                                                     *:ConvBhCmd*
+:ConvBhCmd {shell-cmd}                    Execute the shell command and parse the resulting output
+                                          as CSV text and populate the quickfix list with violations.
+
+
+FILTER OPTIONS                                       *vim-axivion-bauhaus-filters*
+
+Some of the commands can take {filter-options} to filter the violations, e.g. by error number, file path or severity.
+Using filter-options is optional.
+(Note: Currently suppressed violations are always filtered.)
+Multiple filter-options can be used in the same call.
+They will be concatenated with AND, i.e. each violation must pass all filters.
+Each filter-option must have the following form:
+
+`type:mode:pattern[;pattern]*`
+
+* type: The column to be filtered (e.g. error, path, severity)
+    * Some columns are key-worded for ease-of-use (e.g. the "Error Number" column is keyworded as "error").
+    * If a column has no keyword, then its full name can be used.
+* mode:
+    * default (leave empty): Check if the pattern is contained in the field.
+    * exact (!): Check if the pattern is equal to the field.
+    * negate (-): Will negate the result
+* pattern:
+    * The pattern to be searched for.
+    * Multiple patterns can be specified (separated by ;) and are concatenated with OR, i.e. each violation must only pass at least one of the patterns.
+
+Examples:
+
+* `error::M6` will only show violations which contain M6 in their error number.
+* `path::%` will only show violations which contain the current file in their path.
+* `severity:!:required;advisory` will only show violations whose severity field is exactly required or advisory.
+* `path:-:/usr` will remove all findings whose path includes "/usr"
+* `Id:!-:SV01` will show all findings whose Id column is not exactly "SV01".
+
+
+GENERAL OPTIONS                                      *vim-axivion-bauhaus-options*
+
+                                                     *bauhaus-version*
+g:bauhaus_version                               Version of Bauhaus. Currently there is no real
+                                                difference, but this might become relevant in future
+                                                updates. (Default: '6.9.15')
+
+                                                     *open-error-list*
+g:vim_axivion_bauhaus_open_error_list           If this option is set to 1, then :copen will be
+                                                called after the quickfix list has been populated.
+                                                If no errors are found, the list won't be opened.
+                                                (Default: 0)
+
+                                                     *jump-to-error*
+g:vim_axivion_bauhaus_jump_to_error             If this option is set to 1, then :cc will be called
+                                                after the quickfix list has been populated.
+                                                If no errors are found, the list won't be opened.
+                                                (Default: 1)
